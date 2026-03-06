@@ -131,6 +131,9 @@ export const GOALS = [
 export interface GoalContext {
   friction: string;
   strategies: string[];
+  concretePaths: string[];
+  reflectionQuestions: string[];
+  smallStep: string;
 }
 
 export interface AnalysisResult {
@@ -151,7 +154,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Cari rekan bisnis yang kuat dalam operasional (Pelaksana) untuk menjaga stabilitas.",
           "Fokuslah pada inovasi produk atau strategi pemasaran yang kreatif.",
           "Gunakan sistem 'batching' untuk menyelesaikan tugas administratif agar kamu punya waktu bebas untuk eksplorasi."
-        ]
+        ],
+        concretePaths: [
+          "Agensi kreatif atau studio desain",
+          "Startup teknologi tahap awal (Early-stage)",
+          "Bisnis berbasis tren atau produk musiman",
+          "Kreator konten atau media baru"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu sering berhenti di tengah jalan karena ada ide baru yang lebih menarik?",
+          "Siapa orang yang bisa membantumu menjaga agar ide-idemu tetap membumi?"
+        ],
+        smallStep: "Pilih satu ide bisnismu yang paling sederhana dan buatlah satu postingan media sosial untuk mengetes minat pasar dalam 24 jam ke depan."
       },
       "Ingin meningkatkan skill tertentu": {
         friction: "Mempelajari skill seringkali membutuhkan pengulangan yang membosankan. Kamu mungkin tergoda untuk pindah ke skill lain sebelum benar-benar menguasai yang satu ini.",
@@ -159,7 +173,17 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Gunakan metode belajar yang variatif (video, praktik, diskusi) agar tidak bosan.",
           "Cari cara untuk langsung menerapkan skill tersebut pada proyek nyata yang menarik bagimu.",
           "Tetapkan target jangka pendek yang menantang agar rasa ingin tahumu tetap terjaga."
-        ]
+        ],
+        concretePaths: [
+          "Belajar melalui hackathon atau kompetisi",
+          "Mengikuti kursus kilat (bootcamp) yang intensif",
+          "Belajar secara otodidak dengan proyek-proyek kecil yang berbeda setiap minggu"
+        ],
+        reflectionQuestions: [
+          "Kapan terakhir kali kamu benar-benar menyelesaikan satu kursus hingga akhir?",
+          "Apa satu skill yang jika kamu kuasai akan membuka 10 pintu peluang baru?"
+        ],
+        smallStep: "Cari satu tutorial singkat tentang skill tersebut dan selesaikan dalam satu duduk hari ini."
       },
       "Ingin mendapatkan stabilitas finansial": {
         friction: "Stabilitas membutuhkan disiplin dan jalur yang terprediksi, sementara kamu cenderung ingin mencoba banyak peluang baru yang belum tentu stabil.",
@@ -167,15 +191,17 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Coba beberapa peluang kecil secara paralel untuk menemukan mana yang paling menguntungkan.",
           "Setelah menemukan satu jalur yang bekerja, paksa dirimu untuk fokus di sana selama periode tertentu.",
           "Alokasikan 'dana eksperimen' agar kamu tetap bisa mencoba ide baru tanpa mengganggu keamanan finansial utamamu."
-        ]
-      },
-      "Ingin membuat proyek atau produk": {
-        friction: "Kamu sangat hebat dalam memulai, tapi seringkali kesulitan dalam menyelesaikan detail akhir yang rumit.",
-        strategies: [
-          "Buatlah versi minimal (MVP) secepat mungkin agar kamu bisa melihat hasil nyata.",
-          "Gunakan alat bantu otomatisasi untuk menangani detail teknis yang repetitif.",
-          "Bekerjalah dalam sprint pendek agar antusiasmemu tetap tinggi."
-        ]
+        ],
+        concretePaths: [
+          "Pekerjaan freelance di beberapa bidang kreatif",
+          "Investasi pada aset yang memiliki potensi pertumbuhan tinggi namun berisiko",
+          "Membangun beberapa sumber pendapatan kecil (side hustles)"
+        ],
+        reflectionQuestions: [
+          "Apakah keinginanmu mencoba hal baru sebenarnya adalah bentuk pelarian dari tanggung jawab finansial?",
+          "Bagaimana jika kamu menetapkan satu 'jalur utama' dan membatasi eksplorasi hanya di waktu luang?"
+        ],
+        smallStep: "Catat semua sumber pengeluaranmu bulan lalu dan identifikasi satu pengeluaran 'eksplorasi' yang bisa kamu hemat untuk ditabung."
       }
     },
     defaultContext: {
@@ -184,7 +210,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
         "Terapkan aturan 'satu ide besar dalam satu waktu' agar energimu tidak tersebar.",
         "Dokumentasikan ide-ide barumu dalam sebuah jurnal agar tidak hilang, tapi jangan langsung dikerjakan.",
         "Cari lingkungan yang menghargai inovasi dan perubahan cepat."
-      ]
+      ],
+      concretePaths: [
+        "Konsultan inovasi",
+        "Pengembang produk baru",
+        "Penulis atau jurnalis lepas",
+        "Penyelenggara acara kreatif"
+      ],
+      reflectionQuestions: [
+        "Apakah kamu merasa tercekik oleh rutinitas yang terlalu kaku?",
+        "Bagaimana kamu bisa menyisipkan elemen kejutan dalam pekerjaan harianmu?"
+      ],
+      smallStep: "Tuliskan 3 ide liar yang kamu miliki hari ini di sebuah buku catatan, lalu lupakan mereka sampai minggu depan."
     }
   },
   [Tendency.DEEP_THINKER]: {
@@ -197,7 +234,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Bangun bisnis yang berbasis pada keahlian khusus atau riset mendalam.",
           "Tetapkan batas waktu untuk riset agar kamu tidak terjebak dalam 'analysis paralysis'.",
           "Bekerjasamalah dengan orang yang berorientasi pada aksi (Pelaksana) untuk mendorong kemajuan."
-        ]
+        ],
+        concretePaths: [
+          "Bisnis konsultasi atau penasihat strategis",
+          "Produk digital berbasis pengetahuan (kursus online, e-book)",
+          "Layanan riset pasar atau analisis data",
+          "Pengembangan perangkat lunak khusus (niche software)"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu sering tertahan karena terlalu lama menganalisis?",
+          "Atau sebenarnya lingkungan sekitarmu yang tidak memberi ruang untuk berpikir mendalam?"
+        ],
+        smallStep: "Coba buat satu keputusan kecil dalam 48 jam tanpa analisis tambahan. Gunakan ini sebagai eksperimen untuk melatih ritme eksekusi."
       },
       "Ingin mendapatkan stabilitas finansial": {
         friction: "Tujuan finansial sering membutuhkan keputusan yang cukup cepat. Karena kamu cenderung menganalisis cukup lama, kadang peluang emas bisa terlewat.",
@@ -205,7 +253,17 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Fokuslah pada membangun keahlian yang bernilai tinggi (high-value skill) terlebih dahulu.",
           "Pahami sistem investasi secara mendalam agar kamu merasa aman saat menempatkan uangmu.",
           "Buatlah rencana finansial berbasis data yang bisa kamu tinjau secara berkala."
-        ]
+        ],
+        concretePaths: [
+          "Investasi jangka panjang berbasis nilai (Value Investing)",
+          "Membangun portofolio aset intelektual",
+          "Bekerja di bidang keuangan, audit, atau perencanaan strategis"
+        ],
+        reflectionQuestions: [
+          "Apakah ketakutanmu akan risiko finansial sebenarnya berasal dari kurangnya data atau kurangnya keberanian melangkah?",
+          "Kapan terakhir kali kamu mengambil risiko yang sudah kamu hitung dengan matang?"
+        ],
+        smallStep: "Baca satu laporan tahunan perusahaan atau satu buku tentang manajemen keuangan dasar hari ini."
       },
       "Ingin meningkatkan skill tertentu": {
         friction: "Kamu mungkin menghabiskan terlalu banyak waktu pada teori dan kurang pada praktik nyata.",
@@ -213,15 +271,17 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Gunakan metode belajar yang terstruktur dan mendalam.",
           "Paksa dirimu untuk mempraktikkan teori yang baru dipelajari dalam waktu 24 jam.",
           "Cari mentor yang bisa memberikan tantangan teknis yang sesuai dengan level pemahamanmu."
-        ]
-      },
-      "Ingin membantu atau membimbing orang lain": {
-        friction: "Kamu mungkin cenderung memberikan penjelasan yang terlalu teknis atau rumit bagi orang lain.",
-        strategies: [
-          "Gunakan analogi sederhana untuk menjelaskan konsep yang kamu pahami secara mendalam.",
-          "Fokuslah pada mendengarkan kebutuhan mereka sebelum memberikan solusi analitis.",
-          "Jadilah mentor bagi mereka yang benar-benar ingin belajar secara serius dan mendalam."
-        ]
+        ],
+        concretePaths: [
+          "Mengambil sertifikasi profesional yang diakui",
+          "Menulis artikel atau jurnal tentang apa yang sedang kamu pelajari",
+          "Mengikuti program pendidikan formal atau gelar lanjutan"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu belajar karena butuh, atau karena belajar adalah cara untuk menghindari aksi?",
+          "Bagaimana kamu bisa mengukur kemajuan belajarmu secara objektif?"
+        ],
+        smallStep: "Tulis ringkasan satu halaman tentang satu konsep sulit yang baru kamu pelajari, seolah-olah kamu menjelaskannya pada anak kecil."
       }
     },
     defaultContext: {
@@ -230,7 +290,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
         "Ingatlah bahwa 'selesai lebih baik daripada sempurna'.",
         "Gunakan kerangka berpikir yang membantu menyederhanakan masalah besar menjadi langkah kecil.",
         "Cari waktu khusus untuk berpikir tanpa gangguan agar kualitas analisismu tetap terjaga."
-      ]
+      ],
+      concretePaths: [
+        "Peneliti atau akademisi",
+        "Analis sistem atau data",
+        "Arsitek atau perencana kota",
+        "Penulis buku non-fiksi"
+      ],
+      reflectionQuestions: [
+        "Apakah kamu merasa lelah karena dunia bergerak terlalu cepat untuk analisismu?",
+        "Bagaimana kamu bisa menciptakan 'pulau ketenangan' di tengah kesibukanmu?"
+      ],
+      smallStep: "Matikan semua notifikasi selama 2 jam hari ini untuk fokus mendalami satu hal yang paling penting bagimu."
     }
   },
   [Tendency.EXECUTOR]: {
@@ -243,7 +314,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Alokasikan waktu khusus setiap minggu untuk meninjau strategi dan visi bisnismu.",
           "Gunakan sistem manajemen tugas yang rapi untuk mendelegasikan pekerjaan yang repetitif.",
           "Pastikan kamu memahami 'mengapa' di balik setiap tugas agar tidak sekadar sibuk."
-        ]
+        ],
+        concretePaths: [
+          "Bisnis ritel atau e-commerce dengan sistem yang jelas",
+          "Layanan jasa profesional (cleaning, logistik, konstruksi)",
+          "Waralaba (franchise) yang sudah memiliki sistem teruji",
+          "Manajemen proyek atau operasional"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu sibuk mengerjakan hal yang benar, atau hanya sekadar sibuk?",
+          "Kapan terakhir kali kamu berhenti sejenak untuk bertanya 'apakah ada cara yang lebih cerdas'?"
+        ],
+        smallStep: "Identifikasi satu tugas yang paling sering kamu lakukan, lalu buatlah panduan tertulis (SOP) agar tugas itu bisa dilakukan lebih cepat atau didelegasikan."
       },
       "Ingin mendapatkan stabilitas finansial": {
         friction: "Kamu mungkin tergoda untuk mengambil terlalu banyak pekerjaan demi pendapatan instan, yang bisa menyebabkan kelelahan (burnout).",
@@ -251,23 +333,17 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Bangun rutinitas pengelolaan keuangan yang konsisten dan otomatis.",
           "Pilihlah jalur pendapatan yang stabil dan memiliki sistem yang sudah teruji.",
           "Hindari terlalu banyak eksperimen finansial yang berisiko tinggi tanpa rencana cadangan."
-        ]
-      },
-      "Ingin meningkatkan skill tertentu": {
-        friction: "Kamu mungkin ingin cepat-cepat bisa tanpa memahami dasar-dasar yang penting, yang bisa membuat skill-mu kurang kuat di masa depan.",
-        strategies: [
-          "Gunakan metode 'learning by doing' dengan proyek nyata.",
-          "Sediakan waktu sebentar untuk membaca teori dasar sebelum langsung praktik.",
-          "Gunakan checklist untuk memastikan semua bagian dari skill tersebut sudah kamu kuasai."
-        ]
-      },
-      "Ingin membuat proyek atau produk": {
-        friction: "Kamu hebat dalam membuat sesuatu jadi, tapi mungkin kurang memperhatikan sisi estetika atau pengalaman pengguna yang lebih halus.",
-        strategies: [
-          "Fokuslah pada pembuatan prototipe cepat untuk mendapatkan feedback.",
-          "Mintalah masukan dari tipe 'Pemikir Mendalam' atau 'Penjelajah' untuk menyempurnakan konsepmu.",
-          "Gunakan standar kualitas yang jelas agar hasil kerjamu tetap konsisten."
-        ]
+        ],
+        concretePaths: [
+          "Pekerjaan dengan jenjang karir yang jelas di perusahaan besar",
+          "Membangun aset properti atau bisnis yang menghasilkan arus kas rutin",
+          "Menabung secara otomatis melalui sistem potong gaji"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu bekerja untuk uang, atau uang yang bekerja untukmu?",
+          "Bagaimana kamu bisa meningkatkan nilai per jam kerjamu daripada menambah jam kerja?"
+        ],
+        smallStep: "Aktifkan fitur autodebet untuk tabungan atau investasi hari ini, meskipun jumlahnya kecil."
       }
     },
     defaultContext: {
@@ -276,7 +352,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
         "Lakukan evaluasi singkat setelah menyelesaikan proyek besar.",
         "Jangan takut untuk berhenti sejenak jika arah pekerjaanmu mulai tidak jelas.",
         "Gunakan energimu untuk membangun sistem yang bisa bekerja secara otomatis."
-      ]
+      ],
+      concretePaths: [
+        "Manajer operasional",
+        "Spesialis logistik",
+        "Teknisi atau ahli lapangan",
+        "Atlet atau pelatih fisik"
+      ],
+      reflectionQuestions: [
+        "Apakah kamu merasa bersalah jika tidak melakukan apa-apa dalam satu jam?",
+        "Bagaimana kamu bisa membedakan antara 'gerak' dan 'kemajuan'?"
+      ],
+      smallStep: "Duduk diam tanpa melakukan apapun selama 10 menit hari ini, hanya untuk melatih kesadaran diri."
     }
   },
   [Tendency.CONNECTOR]: {
@@ -289,7 +376,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Bangun bisnis yang mengandalkan jaringan, komunitas, atau layanan personal.",
           "Cari mitra yang bisa menangani sisi teknis atau operasional yang dingin.",
           "Gunakan kemampuan komunikasimu untuk membangun merek yang dicintai pelanggan."
-        ]
+        ],
+        concretePaths: [
+          "Bisnis berbasis komunitas atau keanggotaan",
+          "Agensi pemasaran atau hubungan masyarakat",
+          "Layanan pelatihan, coaching, atau mentoring",
+          "Bisnis event organizer atau wedding planner"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu sering mengorbankan keuntungan bisnis demi menjaga perasaan orang lain?",
+          "Siapa di jaringanmu yang bisa membantumu mencapai tujuan bisnismu lebih cepat?"
+        ],
+        smallStep: "Hubungi satu orang di jaringanmu hari ini hanya untuk bertanya kabar dan menawarkan bantuan tanpa mengharap imbalan."
       },
       "Ingin membantu atau membimbing orang lain": {
         friction: "Kamu mungkin terlalu banyak memberikan energimu untuk orang lain sehingga lupa mengurus kebutuhanmu sendiri.",
@@ -297,23 +395,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
           "Tetapkan batasan yang jelas tentang kapan dan bagaimana kamu membantu orang lain.",
           "Fokuslah pada membangun sistem bimbingan yang bisa menjangkau banyak orang sekaligus.",
           "Cari komunitas sesama mentor untuk saling mendukung dan berbagi energi."
-        ]
-      },
-      "Ingin meningkatkan skill tertentu": {
-        friction: "Belajar sendirian mungkin terasa sangat membosankan dan menguras energimu.",
-        strategies: [
-          "Cari kelompok belajar atau komunitas yang sedang mempelajari hal yang sama.",
-          "Gunakan metode belajar mengajar (belajar sesuatu lalu langsung menjelaskannya pada orang lain).",
-          "Cari mentor yang bisa memberikan dukungan emosional selain bimbingan teknis."
-        ]
-      },
-      "Ingin mendapatkan stabilitas finansial": {
-        friction: "Kamu mungkin merasa tidak enak untuk menagih bayaran yang pantas atau menegosiasikan gaji.",
-        strategies: [
-          "Gunakan kemampuan sosialmu untuk membuka peluang kolaborasi yang menguntungkan.",
-          "Pahami bahwa stabilitas finansialmu akan membantumu menolong lebih banyak orang di masa depan.",
-          "Cari pekerjaan yang menghargai 'soft skill' dan kemampuan membangun hubungan."
-        ]
+        ],
+        concretePaths: [
+          "Guru, dosen, atau instruktur",
+          "Psikolog, konselor, atau terapis",
+          "Pemimpin komunitas atau organisasi nirlaba",
+          "Manajer sumber daya manusia (HRD)"
+        ],
+        reflectionQuestions: [
+          "Apakah kamu membantu orang lain untuk mengisi kekosongan dalam dirimu sendiri?",
+          "Bagaimana kamu bisa membantu orang lain tanpa membuat mereka tergantung padamu?"
+        ],
+        smallStep: "Tuliskan satu pesan apresiasi yang tulus kepada seseorang yang pernah membantumu di masa lalu."
       }
     },
     defaultContext: {
@@ -322,7 +415,18 @@ export const ANALYSIS_DATA: Record<Tendency, AnalysisResult> = {
         "Cari lingkungan kerja yang kolaboratif dan suportif.",
         "Belajarlah untuk berkata 'tidak' pada permintaan yang tidak sesuai dengan tujuan utamamu.",
         "Gunakan jejaringmu untuk menemukan solusi dari masalah yang sedang kamu hadapi."
-      ]
+      ],
+      concretePaths: [
+        "Hubungan masyarakat (PR)",
+        "Manajer kemitraan (Partnership Manager)",
+        "Pekerja sosial",
+        "Koordinator relawan"
+      ],
+      reflectionQuestions: [
+        "Apakah kamu merasa kesepian jika harus bekerja sendirian dalam waktu lama?",
+        "Bagaimana kamu bisa menyeimbangkan antara waktu untuk orang lain dan waktu untuk dirimu sendiri?"
+      ],
+      smallStep: "Jadwalkan satu waktu 'me-time' di kalendermu minggu ini dan perlakukan itu sebagai janji yang tidak bisa dibatalkan."
     }
   }
 };

@@ -85,13 +85,27 @@ export default function App() {
     const finalGoal = selectedGoal === 'Lainnya' ? customGoal : selectedGoal;
     const context = analysis.goalContexts[finalGoal] || analysis.defaultContext;
 
+    // Calculate scales (0-10)
+    const getScale = (t: TendencyType) => Math.min(10, Math.round(((counts[t] || 0) / answers.length) * 10 * 1.5));
+    
+    const scales = {
+      analisis: getScale(Tendency.DEEP_THINKER),
+      eksplorasi: getScale(Tendency.EXPLORER),
+      eksekusi: getScale(Tendency.EXECUTOR),
+      kolaborasi: getScale(Tendency.CONNECTOR)
+    };
+
     return {
       tendency: dominant,
       description: analysis.description,
       strengths: analysis.strengths,
       friction: context.friction,
       strategies: context.strategies,
-      goal: finalGoal
+      concretePaths: context.concretePaths,
+      reflectionQuestions: context.reflectionQuestions,
+      smallStep: context.smallStep,
+      goal: finalGoal,
+      scales
     };
   }, [answers, selectedGoal, customGoal]);
 
@@ -99,6 +113,12 @@ export default function App() {
     setStep('home');
     setCurrentQuestionIndex(0);
     setAnswers([]);
+    setSelectedGoal('');
+    setCustomGoal('');
+  };
+
+  const tryAnotherGoal = () => {
+    setStep('goals');
     setSelectedGoal('');
     setCustomGoal('');
   };
@@ -126,20 +146,19 @@ export default function App() {
               className="text-center space-y-8"
             >
               <div className="space-y-4">
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-stone-900">
-                  Kenali Cara Kerjamu
+                <h1 className="text-4xl md:text-6xl font-black tracking-tight text-stone-900">
+                  Kompas Cara Kerja
                 </h1>
-                <p className="text-lg text-stone-600 leading-relaxed max-w-md mx-auto">
-                  Aplikasi ini membantu kamu memahami cara kamu berpikir, belajar, dan bekerja. 
-                  Setelah itu, sistem akan mencoba mencocokkannya dengan tujuan yang ingin kamu capai.
+                <p className="text-xl text-stone-600 leading-relaxed max-w-md mx-auto">
+                  Temukan cara kerjamu, lalu lihat strategi yang lebih cocok untuk tujuanmu.
                 </p>
               </div>
               <button
                 onClick={handleStart}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-stone-900 text-stone-50 rounded-full font-medium hover:bg-stone-800 transition-colors group"
+                className="inline-flex items-center gap-2 px-10 py-5 bg-stone-900 text-stone-50 rounded-full font-bold text-lg hover:bg-stone-800 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-stone-200 group"
               >
                 Mulai
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
           )}
@@ -273,6 +292,16 @@ export default function App() {
                   </button>
                 </motion.form>
               )}
+
+              {answers.length > 0 && (
+                <button
+                  onClick={() => setStep('questions')}
+                  className="flex items-center gap-2 text-stone-400 hover:text-stone-600 transition-colors text-sm font-medium"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Kembali ke Pertanyaan
+                </button>
+              )}
             </motion.div>
           )}
 
@@ -281,97 +310,189 @@ export default function App() {
               key="result"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="space-y-12"
+              className="space-y-16 pb-24"
             >
               <header className="text-center space-y-4">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white shadow-sm border border-stone-100 mb-4">
+                <div className="inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-white shadow-xl shadow-stone-200 border border-stone-100 mb-6">
                   {getIconForTendency(result.tendency)}
                 </div>
-                <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-stone-400">
-                  Hasil Analisis
+                <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400">
+                  Profil Utama Kamu
                 </h2>
-                <h1 className="text-4xl font-bold text-stone-900">
+                <h1 className="text-5xl font-black text-stone-900">
                   {result.tendency}
                 </h1>
               </header>
 
-              <div className="space-y-12">
-                {/* Section 1: Cara Kerja */}
+              <div className="space-y-16">
+                {/* 1. Cara Kerja Kamu */}
                 <section className="space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <div className="w-1 h-6 bg-stone-900 rounded-full" />
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
                     1. Cara Kerja Kamu
                   </h3>
-                  <p className="text-lg text-stone-600 leading-relaxed">
+                  <p className="text-xl text-stone-600 leading-relaxed">
                     {result.description}
                   </p>
                 </section>
 
-                {/* Section 2: Kekuatan Alami */}
-                <section className="space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <div className="w-1 h-6 bg-stone-900 rounded-full" />
-                    2. Kekuatan Alami
+                {/* 2. Profil Cara Kerja (Skala) */}
+                <section className="space-y-6">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    2. Profil Cara Kerja
                   </h3>
-                  <div className="grid gap-3">
-                    {result.strengths.map((strength, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-stone-100 shadow-sm">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                        <span className="text-stone-700">{strength}</span>
+                  <div className="space-y-6 bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
+                    {[
+                      { label: 'Analisis mendalam', value: result.scales.analisis },
+                      { label: 'Eksplorasi ide', value: result.scales.eksplorasi },
+                      { label: 'Eksekusi cepat', value: result.scales.eksekusi },
+                      { label: 'Kolaborasi', value: result.scales.kolaborasi },
+                    ].map((item, idx) => (
+                      <div key={idx} className="space-y-2">
+                        <div className="flex justify-between text-sm font-bold text-stone-500 uppercase tracking-wider">
+                          <span>{item.label}</span>
+                          <span>{item.value * 10}%</span>
+                        </div>
+                        <div className="h-3 bg-stone-100 rounded-full overflow-hidden flex">
+                          {Array.from({ length: 10 }).map((_, i) => (
+                            <div 
+                              key={i}
+                              className={`flex-1 border-r border-white last:border-0 transition-all duration-1000 delay-${i * 100}`}
+                              style={{ 
+                                backgroundColor: i < item.value ? '#1c1917' : '#f5f5f4',
+                                opacity: i < item.value ? 1 : 0.3
+                              }}
+                            />
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </section>
 
-                {/* Section 3: Potensi Gesekan */}
+                {/* 3. Kekuatan Alami */}
                 <section className="space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <div className="w-1 h-6 bg-stone-900 rounded-full" />
-                    3. Potensi Gesekan dengan Tujuan
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    3. Kekuatan Alami
                   </h3>
-                  <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl">
-                    <p className="text-stone-700 leading-relaxed">
-                      <span className="font-medium text-amber-900 block mb-2 italic">"{result.goal}"</span>
+                  <div className="grid gap-4">
+                    {result.strengths.map((strength, idx) => (
+                      <div key={idx} className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-stone-100 shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
+                          <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                        </div>
+                        <span className="text-lg text-stone-700 font-medium">{strength}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* 4. Potensi Gesekan */}
+                <section className="space-y-4">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    4. Potensi Gesekan dengan Tujuan
+                  </h3>
+                  <div className="p-8 bg-amber-50 border border-amber-100 rounded-3xl">
+                    <p className="text-xl text-stone-700 leading-relaxed">
+                      <span className="font-bold text-amber-900 block mb-3 italic">"{result.goal}"</span>
                       {result.friction}
                     </p>
                   </div>
                 </section>
 
-                {/* Section 4: Strategi yang Lebih Cocok */}
-                <section className="p-8 bg-stone-900 text-stone-50 rounded-[2.5rem] space-y-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-8 opacity-10">
-                    <Target className="w-32 h-32" />
+                {/* 5. Strategi yang Lebih Cocok */}
+                <section className="p-10 bg-stone-900 text-stone-50 rounded-[3rem] space-y-8 relative overflow-hidden shadow-2xl shadow-stone-300">
+                  <div className="absolute top-0 right-0 p-12 opacity-5">
+                    <Target className="w-48 h-48" />
                   </div>
-                  <h3 className="text-2xl font-bold relative z-10">
-                    4. Strategi yang Lebih Cocok
+                  <h3 className="text-3xl font-black relative z-10">
+                    5. Strategi yang Lebih Cocok
                   </h3>
-                  <div className="space-y-4 relative z-10">
+                  <div className="space-y-6 relative z-10">
                     {result.strategies.map((strategy, idx) => (
-                      <div key={idx} className="flex gap-4 items-start">
-                        <div className="w-6 h-6 rounded-full bg-stone-800 flex items-center justify-center shrink-0 mt-1 text-xs font-bold">
+                      <div key={idx} className="flex gap-6 items-start">
+                        <div className="w-8 h-8 rounded-full bg-stone-800 flex items-center justify-center shrink-0 mt-1 text-sm font-black border border-stone-700">
                           {idx + 1}
                         </div>
-                        <p className="text-lg text-stone-200 leading-relaxed">
+                        <p className="text-xl text-stone-200 leading-relaxed">
                           {strategy}
                         </p>
                       </div>
                     ))}
                   </div>
                 </section>
+
+                {/* 6. Contoh Jalur yang Bisa Dicoba */}
+                <section className="space-y-4">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    6. Contoh Jalur yang Bisa Dicoba
+                  </h3>
+                  <div className="grid gap-3">
+                    {result.concretePaths.map((path, idx) => (
+                      <div key={idx} className="p-5 bg-white rounded-2xl border border-stone-200 flex items-center gap-4">
+                        <div className="w-2 h-2 rounded-full bg-stone-900" />
+                        <span className="text-lg text-stone-700">{path}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* 7. Pertanyaan Refleksi */}
+                <section className="space-y-4">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    7. Pertanyaan Refleksi
+                  </h3>
+                  <div className="space-y-4">
+                    {result.reflectionQuestions.map((q, idx) => (
+                      <div key={idx} className="p-6 bg-stone-100 rounded-2xl border-l-4 border-stone-900">
+                        <p className="text-lg text-stone-800 font-medium italic">"{q}"</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* 8. Langkah Kecil */}
+                <section className="space-y-4">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    8. Langkah Kecil yang Bisa Dicoba
+                  </h3>
+                  <div className="p-8 bg-emerald-50 border border-emerald-100 rounded-3xl flex gap-6 items-start">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center shrink-0 text-white shadow-lg shadow-emerald-200">
+                      <Zap className="w-6 h-6" />
+                    </div>
+                    <p className="text-xl text-emerald-900 font-medium leading-relaxed">
+                      {result.smallStep}
+                    </p>
+                  </div>
+                </section>
               </div>
 
-              <div className="pt-8 flex flex-col items-center gap-4">
+              <div className="pt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button
+                  onClick={tryAnotherGoal}
+                  className="w-full sm:w-auto px-8 py-4 bg-stone-200 text-stone-900 rounded-2xl font-bold hover:bg-stone-300 transition-all flex items-center justify-center gap-2"
+                >
+                  <Target className="w-5 h-5" />
+                  Coba Tujuan Lain
+                </button>
                 <button
                   onClick={reset}
-                  className="flex items-center gap-2 px-6 py-3 text-stone-500 hover:text-stone-900 transition-colors font-medium"
+                  className="w-full sm:w-auto px-8 py-4 bg-white border border-stone-200 text-stone-500 rounded-2xl font-bold hover:text-stone-900 hover:border-stone-900 transition-all flex items-center justify-center gap-2"
                 >
-                  <RefreshCcw className="w-4 h-4" />
+                  <RefreshCcw className="w-5 h-5" />
                   Ulangi Refleksi
                 </button>
-                <p className="text-xs text-stone-400 text-center max-w-xs">
-                  Aplikasi ini adalah alat bantu refleksi diri, bukan diagnosis psikologis. Gunakan hasilnya sebagai bahan pertimbangan strategis.
-                </p>
               </div>
+              
+              <p className="text-sm text-stone-400 text-center max-w-md mx-auto">
+                Aplikasi ini adalah alat bantu refleksi diri untuk membantumu menemukan strategi yang lebih cocok. Gunakan hasilnya sebagai bahan pertimbangan strategis.
+              </p>
             </motion.div>
           )}
         </AnimatePresence>

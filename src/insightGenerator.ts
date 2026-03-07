@@ -10,6 +10,10 @@ export interface DynamicInsight {
   concretePaths: string[];
   reflectionQuestions: string[];
   smallStep: string;
+  wayangSymbol: {
+    name: string;
+    description: string;
+  };
 }
 
 export function generateDynamicInsight(totalScores: Record<Dimension, number>, goal: string): DynamicInsight {
@@ -32,5 +36,6 @@ export function generateDynamicInsight(totalScores: Record<Dimension, number>, g
     concretePaths: goalContext.concretePaths,
     reflectionQuestions: goalContext.reflectionQuestions,
     smallStep: goalContext.smallStep,
+    wayangSymbol: analysis.wayangSymbol,
   };
 }

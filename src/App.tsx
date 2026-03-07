@@ -154,6 +154,7 @@ export default function App() {
       concretePaths: insight.concretePaths,
       reflectionQuestions: insight.reflectionQuestions,
       smallStep: insight.smallStep,
+      wayangSymbol: insight.wayangSymbol,
       goal: finalGoal,
       scales,
       confidence
@@ -400,11 +401,11 @@ export default function App() {
               </header>
 
               <div className="space-y-16">
-                {/* 1. Cara Kerja Kamu */}
+                {/* 1. Narasi Perjalananmu */}
                 <section className="space-y-4">
                   <h3 className="text-2xl font-bold flex items-center gap-3">
                     <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
-                    1. Cara Kerja Kamu
+                    1. Narasi Perjalananmu
                   </h3>
                   <p className="text-xl text-stone-600 leading-relaxed">
                     {result.description}
@@ -412,6 +413,19 @@ export default function App() {
                   <p className="text-sm text-stone-400 italic bg-stone-100 p-4 rounded-xl">
                     Kombinasi Skor: {result.scoreCombination}
                   </p>
+                </section>
+
+                {/* Simbol Perjalanan */}
+                <section className="space-y-4">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-[var(--color-java-gold)] rounded-full" />
+                    Simbol Perjalanan: {result.wayangSymbol.name}
+                  </h3>
+                  <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl">
+                    <p className="text-lg text-stone-800 font-medium italic">
+                      "{result.wayangSymbol.description}"
+                    </p>
+                  </div>
                 </section>
 
                 {/* 2. Profil Cara Kerja (Skala) */}

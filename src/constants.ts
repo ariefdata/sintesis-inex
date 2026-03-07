@@ -634,7 +634,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
     challenges: ["Mudah bosan dengan rutinitas", "Kurang fokus pada detail teknis", "Sering memulai proyek baru sebelum menyelesaikan yang lama"],
     goalContexts: {
       "Ingin membangun bisnis": {
-        friction: "Bisnis membutuhkan konsistensi dan rutinitas yang seringkali terasa membosankan bagi jiwa penjelajahmu. Kamu mungkin cepat bosan setelah fase ide awal selesai.",
+        friction: "Bisnis menuntut konsistensi, struktur, dan rutinitas operasional yang seringkali terasa membelenggu bagi jiwa penjelajahmu. Tantangan terbesarmu adalah mempertahankan antusiasme saat fase 'ide baru' berakhir dan fase 'eksekusi rutin' dimulai. Kamu berisiko kehilangan minat tepat saat bisnis membutuhkan ketekunan paling tinggi.",
         strategies: [
           "Cari rekan bisnis yang kuat dalam operasional (Pelaksana) untuk menjaga stabilitas.",
           "Fokuslah pada inovasi produk atau strategi pemasaran yang kreatif.",
@@ -646,7 +646,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       }
     },
     defaultContext: {
-      friction: "Kecenderunganmu untuk terus mencari hal baru bisa membuatmu kehilangan fokus pada apa yang sedang dikerjakan saat ini.",
+      friction: "Kecenderunganmu untuk terus mencari hal baru bisa membuatmu kehilangan fokus pada apa yang sedang dikerjakan saat ini. Gesekannya muncul ketika kamu merasa terbebani oleh komitmen jangka panjang yang mengharuskanmu untuk tetap berada di satu tempat atau satu topik terlalu lama.",
       strategies: ["Terapkan aturan 'satu ide besar dalam satu waktu'.", "Dokumentasikan ide-ide baru dalam jurnal.", "Cari lingkungan yang menghargai inovasi."],
       concretePaths: ["Konsultan inovasi", "Pengembang produk baru", "Penulis lepas"],
       reflectionQuestions: ["Apakah kamu merasa tercekik oleh rutinitas?", "Bagaimana kamu bisa menyisipkan elemen kejutan?"],
@@ -664,7 +664,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
     challenges: ["Analysis paralysis (terjebak dalam analisis)", "Lambat dalam pengambilan keputusan", "Cenderung perfeksionis yang menghambat aksi"],
     goalContexts: {
       "Ingin membangun bisnis": {
-        friction: "Dunia bisnis menuntut keputusan cepat, sementara kamu ingin menganalisis semuanya hingga sempurna.",
+        friction: "Dunia bisnis seringkali menuntut keputusan cepat berdasarkan data yang tidak sempurna, sementara kamu cenderung terjebak dalam keinginan untuk menganalisis semuanya hingga sempurna. Gesekannya muncul ketika kebutuhan untuk 'segera bertindak' berbenturan dengan keinginanmu untuk 'memahami segalanya terlebih dahulu', yang bisa membuatmu kehilangan momentum pasar.",
         strategies: ["Bangun bisnis berbasis keahlian khusus.", "Tetapkan batas waktu riset.", "Bekerjasamalah dengan Pelaksana."],
         concretePaths: ["Bisnis konsultasi", "Produk digital berbasis pengetahuan", "Layanan riset pasar"],
         reflectionQuestions: ["Apakah kamu terjebak dalam analysis paralysis?", "Bagaimana kamu bisa mempercepat ritme keputusan?"],
@@ -672,7 +672,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       }
     },
     defaultContext: {
-      friction: "Kebutuhanmu akan kesempurnaan informasi bisa menghambat langkah pertamamu.",
+      friction: "Kebutuhanmu akan kesempurnaan informasi dan pemahaman mendalam bisa menghambat langkah pertamamu. Gesekannya muncul ketika keinginan untuk 'tahu segalanya' berbenturan dengan realitas bahwa dunia bergerak cepat dan seringkali menghargai aksi nyata di atas analisis yang sempurna.",
       strategies: ["Ingatlah bahwa 'selesai lebih baik daripada sempurna'.", "Sederhanakan masalah besar menjadi langkah kecil.", "Cari waktu khusus untuk berpikir tanpa gangguan."],
       concretePaths: ["Peneliti", "Analis sistem", "Arsitek"],
       reflectionQuestions: ["Apakah dunia bergerak terlalu cepat untuk analisismu?", "Bagaimana kamu menciptakan pulau ketenangan?"],
@@ -690,7 +690,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
     challenges: ["Kurang reflektif terhadap kesalahan berulang", "Sering melewatkan gambaran besar (strategi)", "Sulit beradaptasi jika rencana berubah drastis"],
     goalContexts: {
       "Ingin membangun bisnis": {
-        friction: "Kamu mungkin terlalu fokus pada tugas harian sehingga lupa strategi jangka panjang.",
+        friction: "Kamu sangat mahir dalam menyelesaikan tugas harian, namun tantangan muncul ketika kamu terlalu sibuk 'bekerja di dalam bisnis' (operasional) hingga lupa 'bekerja pada bisnis' (strategi jangka panjang). Gesekannya adalah risiko terjebak dalam kesibukan yang tidak produktif, di mana kamu terus berlari namun tidak tahu apakah arahnya sudah tepat.",
         strategies: ["Alokasikan waktu tinjauan strategi mingguan.", "Gunakan sistem manajemen tugas untuk delegasi.", "Pahami 'mengapa' di balik setiap tugas."],
         concretePaths: ["Bisnis ritel", "Layanan jasa profesional", "Manajemen proyek"],
         reflectionQuestions: ["Apakah kamu sibuk mengerjakan hal yang benar?", "Kapan terakhir kali kamu bertanya 'ada cara lebih cerdas'?"],
@@ -698,7 +698,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       }
     },
     defaultContext: {
-      friction: "Keinginanmu untuk terus bergerak bisa membuatmu kurang reflektif terhadap kesalahan berulang.",
+      friction: "Keinginanmu untuk terus bergerak bisa membuatmu kurang reflektif terhadap kesalahan berulang. Gesekannya muncul ketika kamu terlalu fokus pada 'menyelesaikan tugas' hingga lupa mengevaluasi apakah tugas tersebut benar-benar membawa kemajuan yang berarti bagi tujuan besarmu.",
       strategies: ["Lakukan evaluasi singkat setelah proyek besar.", "Jangan takut berhenti sejenak jika arah tidak jelas.", "Bangun sistem yang bekerja otomatis."],
       concretePaths: ["Manajer operasional", "Spesialis logistik", "Teknisi lapangan"],
       reflectionQuestions: ["Apakah kamu merasa bersalah jika tidak melakukan apa-apa?", "Bagaimana membedakan gerak dan kemajuan?"],
@@ -716,7 +716,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
     challenges: ["Terlalu nyaman dengan ketidakpastian (kurang struktur)", "Sulit berkomunikasi dengan mereka yang butuh kepastian instan", "Cenderung menunda eksekusi karena terlalu fokus pada skenario masa depan"],
     goalContexts: {
       "Ingin membangun bisnis": {
-        friction: "Kamu mungkin terlalu nyaman dengan ketidakpastian sehingga kurang disiplin dalam membangun struktur yang kokoh.",
+        friction: "Kamu sangat nyaman dengan ketidakpastian, namun bisnis seringkali membutuhkan kedisiplinan struktur dan eksekusi yang disiplin untuk tumbuh. Gesekannya muncul ketika kecenderunganmu untuk terus memikirkan skenario masa depan membuatmu kurang memberikan perhatian yang cukup pada detail operasional yang membosankan namun krusial saat ini.",
         strategies: ["Fokus pada membangun fondasi yang stabil.", "Gunakan visimu untuk memimpin tim melewati masa sulit.", "Tetapkan milestone yang jelas untuk mengukur kemajuan."],
         concretePaths: ["Founder startup", "Manajer krisis", "Penasihat investasi"],
         reflectionQuestions: ["Apakah fleksibilitasmu menghambat konsistensi?", "Bagaimana kamu bisa membuat struktur tanpa mematikan kreativitas?"],
@@ -724,7 +724,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       }
     },
     defaultContext: {
-      friction: "Kemampuanmu menghadapi ketidakpastian bisa membuatmu terlihat kurang fokus bagi orang lain.",
+      friction: "Kemampuanmu menghadapi ketidakpastian bisa membuatmu terlihat kurang fokus atau kurang terarah bagi orang lain. Gesekannya muncul ketika kamu terlalu asyik dengan skenario masa depan sehingga kamu kurang memberikan perhatian pada eksekusi detail yang dibutuhkan untuk mewujudkan skenario tersebut di masa kini.",
       strategies: ["Komunikasikan visimu dengan lebih jelas kepada tim.", "Gunakan data untuk mendukung insting strategismu.", "Cari tantangan yang membutuhkan pemecahan masalah kompleks."],
       concretePaths: ["Konsultan manajemen", "Perencana strategis", "Wirausaha serial"],
       reflectionQuestions: ["Bagaimana kamu bisa membantu orang lain merasa aman di tengah ketidakpastian?", "Apa risiko terbesar yang sedang kamu hadapi?"],
@@ -742,7 +742,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
     challenges: ["Sulit mengambil keputusan tidak populer", "Mudah terdistraksi oleh kebutuhan orang lain", "Sulit bekerja sendiri dalam waktu lama"],
     goalContexts: {
       "Ingin membangun bisnis": {
-        friction: "Kamu mungkin kesulitan mengambil keputusan tegas yang tidak populer demi menjaga perasaan orang lain.",
+        friction: "Bisnis seringkali menuntut pengambilan keputusan yang tegas, terkadang tidak populer, demi keberlangsungan perusahaan. Gesekannya muncul ketika keinginanmu untuk menjaga harmoni dan perasaan orang lain berbenturan dengan kebutuhan untuk membuat keputusan sulit yang mungkin mengecewakan pihak tertentu.",
         strategies: ["Bangun bisnis berbasis komunitas.", "Cari mitra operasional yang tegas.", "Gunakan kemampuan komunikasimu untuk branding."],
         concretePaths: ["Agensi pemasaran", "Layanan pelatihan", "Bisnis event organizer"],
         reflectionQuestions: ["Apakah kamu mengorbankan profit demi harmoni?", "Siapa di jaringanmu yang bisa membantu tujuanmu?"],
@@ -750,7 +750,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       }
     },
     defaultContext: {
-      friction: "Ketergantungan pada interaksi sosial bisa mengganggu produktivitas jika lingkungan tidak mendukung.",
+      friction: "Ketergantungan pada interaksi sosial bisa mengganggu produktivitas jika lingkungan tidak mendukung. Gesekannya muncul ketika kebutuhanmu untuk selalu terhubung dan membantu orang lain membuatmu sulit untuk menetapkan batasan, sehingga kamu sering mengabaikan kebutuhan pribadimu sendiri untuk fokus pada tujuanmu.",
       strategies: ["Cari lingkungan kerja kolaboratif.", "Belajarlah berkata 'tidak' pada permintaan yang tidak relevan.", "Gunakan jejaring untuk mencari solusi."],
       concretePaths: ["Hubungan masyarakat", "Partnership Manager", "Pekerja sosial"],
       reflectionQuestions: ["Apakah kamu merasa kesepian jika bekerja sendiri?", "Bagaimana menyeimbangkan waktu untuk orang lain dan diri sendiri?"],

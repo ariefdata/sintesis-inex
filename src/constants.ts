@@ -615,15 +615,23 @@ export interface GoalContext {
 
 export interface AnalysisResult {
   description: string;
+  scoreCombination: string;
   strengths: string[];
+  challenges: string[];
   goalContexts: Record<string, GoalContext>;
   defaultContext: GoalContext;
+  wayangSymbol: {
+    name: string;
+    description: string;
+  };
 }
 
 export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
   [Archetype.EXPLORER]: {
     description: "Kamu adalah seorang Penjelajah Ide. Kamu cenderung melihat dunia sebagai rangkaian kemungkinan yang tak terbatas. Kamu merasa paling hidup ketika menemukan konsep baru atau mencoba cara-cara yang belum pernah dilakukan sebelumnya.",
+    scoreCombination: "Skor tinggi pada Eksplorasi Ide, skor moderat pada Eksekusi, dan skor rendah pada Analisis Mendalam.",
     strengths: ["Kreativitas tanpa batas", "Kemampuan adaptasi yang cepat", "Berani mengambil risiko pada ide baru"],
+    challenges: ["Mudah bosan dengan rutinitas", "Kurang fokus pada detail teknis", "Sering memulai proyek baru sebelum menyelesaikan yang lama"],
     goalContexts: {
       "Ingin membangun bisnis": {
         friction: "Bisnis membutuhkan konsistensi dan rutinitas yang seringkali terasa membosankan bagi jiwa penjelajahmu. Kamu mungkin cepat bosan setelah fase ide awal selesai.",
@@ -634,7 +642,7 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
         ],
         concretePaths: ["Agensi kreatif", "Startup teknologi tahap awal", "Bisnis berbasis tren"],
         reflectionQuestions: ["Apakah kamu sering berhenti di tengah jalan karena ide baru?", "Siapa yang bisa membantumu tetap membumi?"],
-        smallStep: "Pilih satu ide bisnismu dan buat satu postingan media sosial untuk tes pasar hari ini."
+        smallStep: "Pilih satu ide bisnismu dan buat satu postingan media sosial untuk tes pasar hari ini. Fokus pada manfaat bagi calon pelanggan, bukan fitur produk."
       }
     },
     defaultContext: {
@@ -642,19 +650,25 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       strategies: ["Terapkan aturan 'satu ide besar dalam satu waktu'.", "Dokumentasikan ide-ide baru dalam jurnal.", "Cari lingkungan yang menghargai inovasi."],
       concretePaths: ["Konsultan inovasi", "Pengembang produk baru", "Penulis lepas"],
       reflectionQuestions: ["Apakah kamu merasa tercekik oleh rutinitas?", "Bagaimana kamu bisa menyisipkan elemen kejutan?"],
-      smallStep: "Tuliskan 3 ide liar hari ini, lalu lupakan mereka sampai minggu depan."
+      smallStep: "Tuliskan 3 ide liar hari ini, lalu lupakan mereka sampai minggu depan. Ini melatih otakmu untuk melepaskan keterikatan pada satu ide."
+    },
+    wayangSymbol: {
+      name: "Hanoman",
+      description: "Hanoman melambangkan semangat eksplorasi, keberanian, dan kelincahan dalam menembus batas-batas yang ada."
     }
   },
   [Archetype.DEEP_THINKER]: {
     description: "Kamu adalah seorang Pemikir Mendalam. Kamu cenderung memahami segala sesuatu secara menyeluruh sebelum mengambil keputusan. Kamu merasa paling nyaman ketika memiliki gambaran yang jelas dan logis.",
+    scoreCombination: "Skor tinggi pada Analisis Mendalam, skor rendah pada Eksekusi dan Eksplorasi Ide.",
     strengths: ["Analisis yang tajam", "Kemampuan melihat pola rumit", "Ketekunan dalam belajar"],
+    challenges: ["Analysis paralysis (terjebak dalam analisis)", "Lambat dalam pengambilan keputusan", "Cenderung perfeksionis yang menghambat aksi"],
     goalContexts: {
       "Ingin membangun bisnis": {
         friction: "Dunia bisnis menuntut keputusan cepat, sementara kamu ingin menganalisis semuanya hingga sempurna.",
         strategies: ["Bangun bisnis berbasis keahlian khusus.", "Tetapkan batas waktu riset.", "Bekerjasamalah dengan Pelaksana."],
         concretePaths: ["Bisnis konsultasi", "Produk digital berbasis pengetahuan", "Layanan riset pasar"],
         reflectionQuestions: ["Apakah kamu terjebak dalam analysis paralysis?", "Bagaimana kamu bisa mempercepat ritme keputusan?"],
-        smallStep: "Buat satu keputusan kecil dalam 48 jam tanpa analisis tambahan."
+        smallStep: "Buat satu keputusan kecil dalam 48 jam tanpa analisis tambahan. Percayalah pada intuisi yang telah terasah oleh risetmu sebelumnya."
       }
     },
     defaultContext: {
@@ -662,19 +676,25 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       strategies: ["Ingatlah bahwa 'selesai lebih baik daripada sempurna'.", "Sederhanakan masalah besar menjadi langkah kecil.", "Cari waktu khusus untuk berpikir tanpa gangguan."],
       concretePaths: ["Peneliti", "Analis sistem", "Arsitek"],
       reflectionQuestions: ["Apakah dunia bergerak terlalu cepat untuk analisismu?", "Bagaimana kamu menciptakan pulau ketenangan?"],
-      smallStep: "Matikan notifikasi selama 2 jam hari ini untuk fokus mendalami satu hal."
+      smallStep: "Matikan notifikasi selama 2 jam hari ini untuk fokus mendalami satu hal. Gunakan timer agar kamu tidak merasa cemas kehilangan informasi."
+    },
+    wayangSymbol: {
+      name: "Resi",
+      description: "Resi melambangkan kebijaksanaan, ketenangan dalam berpikir, dan kedalaman pemahaman akan hakikat sesuatu."
     }
   },
   [Archetype.EXECUTOR]: {
     description: "Kamu adalah seorang Pelaksana. Bagimu, hasil nyata adalah yang terpenting. Kamu cenderung langsung bertindak dan merasa puas saat tugas selesai.",
+    scoreCombination: "Skor tinggi pada Eksekusi, skor moderat pada Ketahanan, dan skor rendah pada Analisis Mendalam.",
     strengths: ["Produktivitas tinggi", "Fokus pada solusi praktis", "Keandalan tinggi"],
+    challenges: ["Kurang reflektif terhadap kesalahan berulang", "Sering melewatkan gambaran besar (strategi)", "Sulit beradaptasi jika rencana berubah drastis"],
     goalContexts: {
       "Ingin membangun bisnis": {
         friction: "Kamu mungkin terlalu fokus pada tugas harian sehingga lupa strategi jangka panjang.",
         strategies: ["Alokasikan waktu tinjauan strategi mingguan.", "Gunakan sistem manajemen tugas untuk delegasi.", "Pahami 'mengapa' di balik setiap tugas."],
         concretePaths: ["Bisnis ritel", "Layanan jasa profesional", "Manajemen proyek"],
         reflectionQuestions: ["Apakah kamu sibuk mengerjakan hal yang benar?", "Kapan terakhir kali kamu bertanya 'ada cara lebih cerdas'?"],
-        smallStep: "Buat satu SOP untuk tugas yang paling sering kamu lakukan."
+        smallStep: "Buat satu SOP (Standard Operating Procedure) sederhana untuk tugas yang paling sering kamu lakukan. Ini akan menghemat energimu di masa depan."
       }
     },
     defaultContext: {
@@ -682,19 +702,25 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       strategies: ["Lakukan evaluasi singkat setelah proyek besar.", "Jangan takut berhenti sejenak jika arah tidak jelas.", "Bangun sistem yang bekerja otomatis."],
       concretePaths: ["Manajer operasional", "Spesialis logistik", "Teknisi lapangan"],
       reflectionQuestions: ["Apakah kamu merasa bersalah jika tidak melakukan apa-apa?", "Bagaimana membedakan gerak dan kemajuan?"],
-      smallStep: "Duduk diam tanpa melakukan apapun selama 10 menit hari ini."
+      smallStep: "Duduk diam tanpa melakukan apapun selama 10 menit hari ini. Rasakan sensasi tidak melakukan apa-apa untuk melatih kesabaranmu."
+    },
+    wayangSymbol: {
+      name: "Bima",
+      description: "Bima melambangkan kekuatan, ketegasan, dan keberanian dalam mengeksekusi tugas dengan penuh tanggung jawab."
     }
   },
   [Archetype.STRATEGIST]: {
     description: "Kamu adalah seorang Strategist. Kamu memiliki ketahanan tinggi terhadap ketidakpastian dan mampu menavigasi situasi yang kompleks dengan tenang.",
+    scoreCombination: "Skor tinggi pada Ketahanan terhadap Ketidakpastian dan skor tinggi pada Analisis Mendalam.",
     strengths: ["Ketenangan di bawah tekanan", "Visi strategis", "Kemampuan adaptasi tinggi"],
+    challenges: ["Terlalu nyaman dengan ketidakpastian (kurang struktur)", "Sulit berkomunikasi dengan mereka yang butuh kepastian instan", "Cenderung menunda eksekusi karena terlalu fokus pada skenario masa depan"],
     goalContexts: {
       "Ingin membangun bisnis": {
         friction: "Kamu mungkin terlalu nyaman dengan ketidakpastian sehingga kurang disiplin dalam membangun struktur yang kokoh.",
         strategies: ["Fokus pada membangun fondasi yang stabil.", "Gunakan visimu untuk memimpin tim melewati masa sulit.", "Tetapkan milestone yang jelas untuk mengukur kemajuan."],
         concretePaths: ["Founder startup", "Manajer krisis", "Penasihat investasi"],
         reflectionQuestions: ["Apakah fleksibilitasmu menghambat konsistensi?", "Bagaimana kamu bisa membuat struktur tanpa mematikan kreativitas?"],
-        smallStep: "Tentukan satu target utama untuk bulan depan dan tuliskan 3 langkah konkretnya."
+        smallStep: "Tentukan satu target utama untuk bulan depan dan tuliskan 3 langkah konkret untuk mencapainya. Fokus pada hasil, bukan proses."
       }
     },
     defaultContext: {
@@ -702,19 +728,25 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       strategies: ["Komunikasikan visimu dengan lebih jelas kepada tim.", "Gunakan data untuk mendukung insting strategismu.", "Cari tantangan yang membutuhkan pemecahan masalah kompleks."],
       concretePaths: ["Konsultan manajemen", "Perencana strategis", "Wirausaha serial"],
       reflectionQuestions: ["Bagaimana kamu bisa membantu orang lain merasa aman di tengah ketidakpastian?", "Apa risiko terbesar yang sedang kamu hadapi?"],
-      smallStep: "Identifikasi satu ketidakpastian dalam hidupmu saat ini dan buatlah rencana cadangan (Plan B)."
+      smallStep: "Identifikasi satu ketidakpastian dalam hidupmu saat ini dan buatlah rencana cadangan (Plan B). Ini akan memberimu rasa kendali."
+    },
+    wayangSymbol: {
+      name: "Kresna",
+      description: "Kresna melambangkan kecerdasan strategis, kemampuan melihat gambaran besar, dan ketenangan dalam membimbing di tengah kekacauan."
     }
   },
   [Archetype.CONNECTOR]: {
     description: "Kamu adalah seorang Penghubung. Kamu melihat nilai dalam hubungan antarmanusia dan merasa paling berenergi saat berkolaborasi.",
+    scoreCombination: "Skor tinggi pada Kolaborasi dan skor moderat pada Eksplorasi Ide.",
     strengths: ["Empati tinggi", "Komunikasi persuasif", "Pintar membangun jaringan"],
+    challenges: ["Sulit mengambil keputusan tidak populer", "Mudah terdistraksi oleh kebutuhan orang lain", "Sulit bekerja sendiri dalam waktu lama"],
     goalContexts: {
       "Ingin membangun bisnis": {
         friction: "Kamu mungkin kesulitan mengambil keputusan tegas yang tidak populer demi menjaga perasaan orang lain.",
         strategies: ["Bangun bisnis berbasis komunitas.", "Cari mitra operasional yang tegas.", "Gunakan kemampuan komunikasimu untuk branding."],
         concretePaths: ["Agensi pemasaran", "Layanan pelatihan", "Bisnis event organizer"],
         reflectionQuestions: ["Apakah kamu mengorbankan profit demi harmoni?", "Siapa di jaringanmu yang bisa membantu tujuanmu?"],
-        smallStep: "Hubungi satu orang di jaringanmu hari ini hanya untuk menawarkan bantuan."
+        smallStep: "Hubungi satu orang di jaringanmu hari ini hanya untuk menawarkan bantuan tanpa mengharapkan imbalan. Ini memperkuat hubunganmu."
       }
     },
     defaultContext: {
@@ -722,7 +754,11 @@ export const ANALYSIS_DATA: Record<Archetype, AnalysisResult> = {
       strategies: ["Cari lingkungan kerja kolaboratif.", "Belajarlah berkata 'tidak' pada permintaan yang tidak relevan.", "Gunakan jejaring untuk mencari solusi."],
       concretePaths: ["Hubungan masyarakat", "Partnership Manager", "Pekerja sosial"],
       reflectionQuestions: ["Apakah kamu merasa kesepian jika bekerja sendiri?", "Bagaimana menyeimbangkan waktu untuk orang lain dan diri sendiri?"],
-      smallStep: "Jadwalkan satu waktu 'me-time' di kalendermu minggu ini."
+      smallStep: "Jadwalkan satu waktu 'me-time' (waktu untuk diri sendiri) di kalendermu minggu ini. Kamu berhak mendapatkan waktu untuk mengisi ulang energimu."
+    },
+    wayangSymbol: {
+      name: "Semar",
+      description: "Semar melambangkan kebijaksanaan, kasih sayang, dan kemampuan untuk merangkul serta menghubungkan berbagai pihak dengan rendah hati."
     }
   }
 };

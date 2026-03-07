@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@theme {
+  --color-java-brown: #4A3728;
+  --color-java-gold: #D4AF37;
+  --color-java-cream: #F5F5DC;
+}
+
+body {
+  background-color: var(--color-java-cream);
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  color: var(--color-java-brown);
+}
+
+h1, h2, h3 {
+  color: var(--color-java-brown);
+}
+
+.btn-primary {
+  background-color: var(--color-java-brown);
+  color: var(--color-java-cream);
+}
+
+.border-java {
+  border-color: var(--color-java-gold);
+}

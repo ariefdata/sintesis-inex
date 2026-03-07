@@ -5,6 +5,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { WayangSilhouette } from './components/WayangSilhouette';
 import { 
   ChevronRight, 
   ArrowLeft, 
@@ -22,12 +23,12 @@ import {
   QUESTIONS_BANK, 
   GOALS, 
   Dimension, 
-  ANALYSIS_DATA, 
   Archetype,
   ARCHETYPE_MAP,
   Question,
   Option
 } from './constants';
+import { generateDynamicInsight } from './insightGenerator';
 
 type Step = 'home' | 'questions' | 'goals' | 'result';
 
@@ -117,9 +118,8 @@ export default function App() {
     const archetype = ARCHETYPE_MAP[dominantDim];
     const secondaryArchetype = ARCHETYPE_MAP[secondaryDim];
     
-    const analysis = ANALYSIS_DATA[archetype];
     const finalGoal = selectedGoal === 'Lainnya' ? customGoal : selectedGoal;
-    const context = analysis.goalContexts[finalGoal] || analysis.defaultContext;
+    const insight = generateDynamicInsight(totalScores, finalGoal);
 
     // Normalize scales (0-10)
     const getScale = (dim: Dimension) => {
@@ -145,13 +145,15 @@ export default function App() {
     return {
       archetype,
       secondaryArchetype: archetype !== secondaryArchetype ? secondaryArchetype : null,
-      description: analysis.description,
-      strengths: analysis.strengths,
-      friction: context.friction,
-      strategies: context.strategies,
-      concretePaths: context.concretePaths,
-      reflectionQuestions: context.reflectionQuestions,
-      smallStep: context.smallStep,
+      description: insight.description,
+      scoreCombination: insight.scoreCombination,
+      strengths: insight.strengths,
+      challenges: insight.challenges,
+      friction: insight.friction,
+      strategies: insight.strategies,
+      concretePaths: insight.concretePaths,
+      reflectionQuestions: insight.reflectionQuestions,
+      smallStep: insight.smallStep,
       goal: finalGoal,
       scales,
       confidence
@@ -175,11 +177,11 @@ export default function App() {
 
   const getIconForArchetype = (archetype: Archetype) => {
     switch (archetype) {
-      case Archetype.EXPLORER: return <Lightbulb className="w-8 h-8 text-amber-500" />;
-      case Archetype.DEEP_THINKER: return <BookOpen className="w-8 h-8 text-blue-500" />;
-      case Archetype.EXECUTOR: return <Zap className="w-8 h-8 text-emerald-500" />;
-      case Archetype.CONNECTOR: return <Users className="w-8 h-8 text-purple-500" />;
-      case Archetype.STRATEGIST: return <Shield className="w-8 h-8 text-rose-500" />;
+      case Archetype.EXPLORER: return <Lightbulb className="w-8 h-8 text-[var(--color-java-gold)]" />;
+      case Archetype.DEEP_THINKER: return <BookOpen className="w-8 h-8 text-[var(--color-java-brown)]" />;
+      case Archetype.EXECUTOR: return <Zap className="w-8 h-8 text-[var(--color-java-brown)]" />;
+      case Archetype.CONNECTOR: return <Users className="w-8 h-8 text-[var(--color-java-brown)]" />;
+      case Archetype.STRATEGIST: return <Shield className="w-8 h-8 text-[var(--color-java-gold)]" />;
       default: return null;
     }
   };
@@ -197,7 +199,8 @@ export default function App() {
               className="text-center space-y-8"
             >
               <div className="space-y-4">
-                <h1 className="text-4xl md:text-6xl font-black tracking-tight text-stone-900">
+                <h1 className="text-4xl md:text-6xl font-black tracking-tight text-stone-900 flex items-center justify-center gap-4">
+                  <WayangSilhouette className="w-10 h-10 text-[var(--color-java-gold)]" />
                   Kompas Cara Kerja
                 </h1>
                 <p className="text-xl text-stone-600 leading-relaxed max-w-md mx-auto">
@@ -374,11 +377,12 @@ export default function App() {
               className="space-y-16 pb-24"
             >
               <header className="text-center space-y-4">
-                <div className="inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-white shadow-xl shadow-stone-200 border border-stone-100 mb-6">
+                <div className="inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-white shadow-xl shadow-stone-200 border border-java mb-6 relative">
                   {getIconForArchetype(result.archetype)}
+                  <WayangSilhouette className="w-8 h-8 text-[var(--color-java-gold)] absolute -bottom-2 -right-2" />
                 </div>
                 <div className="space-y-1">
-                  <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400">
+                  <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-[var(--color-java-brown)]">
                     Archetype Utama
                   </h2>
                   <h1 className="text-5xl font-black text-stone-900">
@@ -404,6 +408,9 @@ export default function App() {
                   </h3>
                   <p className="text-xl text-stone-600 leading-relaxed">
                     {result.description}
+                  </p>
+                  <p className="text-sm text-stone-400 italic bg-stone-100 p-4 rounded-xl">
+                    Kombinasi Skor: {result.scoreCombination}
                   </p>
                 </section>
 
@@ -455,11 +462,29 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* 4. Potensi Gesekan */}
+                {/* 4. Tantangan yang Mungkin Dihadapi */}
                 <section className="space-y-4">
                   <h3 className="text-2xl font-bold flex items-center gap-3">
                     <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
-                    4. Potensi Gesekan dengan Tujuan
+                    4. Tantangan yang Mungkin Dihadapi
+                  </h3>
+                  <div className="grid gap-4">
+                    {result.challenges.map((challenge, idx) => (
+                      <div key={idx} className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-stone-100 shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center shrink-0">
+                          <Shield className="w-5 h-5 text-rose-500" />
+                        </div>
+                        <span className="text-lg text-stone-700 font-medium">{challenge}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* 5. Potensi Gesekan */}
+                <section className="space-y-4">
+                  <h3 className="text-2xl font-bold flex items-center gap-3">
+                    <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
+                    5. Potensi Gesekan dengan Tujuan
                   </h3>
                   <div className="p-8 bg-amber-50 border border-amber-100 rounded-3xl">
                     <p className="text-xl text-stone-700 leading-relaxed">
@@ -469,13 +494,13 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* 5. Strategi yang Lebih Cocok */}
+                {/* 6. Strategi yang Lebih Cocok */}
                 <section className="p-10 bg-stone-900 text-stone-50 rounded-[3rem] space-y-8 relative overflow-hidden shadow-2xl shadow-stone-300">
                   <div className="absolute top-0 right-0 p-12 opacity-5">
                     <Target className="w-48 h-48" />
                   </div>
                   <h3 className="text-3xl font-black relative z-10">
-                    5. Strategi yang Lebih Cocok
+                    6. Strategi yang Lebih Cocok
                   </h3>
                   <div className="space-y-6 relative z-10">
                     {result.strategies.map((strategy, idx) => (
@@ -491,11 +516,11 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* 6. Contoh Jalur yang Bisa Dicoba */}
+                {/* 7. Contoh Jalur yang Bisa Dicoba */}
                 <section className="space-y-4">
                   <h3 className="text-2xl font-bold flex items-center gap-3">
                     <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
-                    6. Contoh Jalur yang Bisa Dicoba
+                    7. Contoh Jalur yang Bisa Dicoba
                   </h3>
                   <div className="grid gap-3">
                     {result.concretePaths.map((path, idx) => (
@@ -507,11 +532,11 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* 7. Pertanyaan Refleksi */}
+                {/* 8. Pertanyaan Refleksi */}
                 <section className="space-y-4">
                   <h3 className="text-2xl font-bold flex items-center gap-3">
                     <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
-                    7. Pertanyaan Refleksi
+                    8. Pertanyaan Refleksi
                   </h3>
                   <div className="space-y-4">
                     {result.reflectionQuestions.map((q, idx) => (
@@ -522,11 +547,11 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* 8. Langkah Kecil */}
+                {/* 9. Langkah Kecil */}
                 <section className="space-y-4">
                   <h3 className="text-2xl font-bold flex items-center gap-3">
                     <div className="w-1.5 h-8 bg-stone-900 rounded-full" />
-                    8. Langkah Kecil yang Bisa Dicoba
+                    9. Langkah Kecil yang Bisa Dicoba
                   </h3>
                   <div className="p-8 bg-emerald-50 border border-emerald-100 rounded-3xl flex gap-6 items-start">
                     <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center shrink-0 text-white shadow-lg shadow-emerald-200">

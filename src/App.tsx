@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ChevronRight, 
@@ -14,32 +14,60 @@ import {
   Zap, 
   Users, 
   BookOpen,
-  RefreshCcw
+  RefreshCcw,
+  Shield,
+  Search
 } from 'lucide-react';
 import { 
-  QUESTIONS, 
+  QUESTIONS_BANK, 
   GOALS, 
-  Tendency, 
+  Dimension, 
   ANALYSIS_DATA, 
-  Tendency as TendencyType 
+  Archetype,
+  ARCHETYPE_MAP,
+  Question,
+  Option
 } from './constants';
 
 type Step = 'home' | 'questions' | 'goals' | 'result';
 
 export default function App() {
   const [step, setStep] = useState<Step>('home');
+  const [sessionQuestions, setSessionQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<TendencyType[]>([]);
+  const [answers, setAnswers] = useState<Partial<Record<Dimension, number>>[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<string>('');
   const [customGoal, setCustomGoal] = useState<string>('');
 
-  const handleStart = () => setStep('questions');
+  // Initialize session questions: 4 random from each dimension
+  useEffect(() => {
+    if (step === 'questions' && sessionQuestions.length === 0) {
+      const dimensions = Object.values(Dimension);
+      const selected: Question[] = [];
+      
+      dimensions.forEach(dim => {
+        const dimQuestions = QUESTIONS_BANK.filter(q => q.dimension === dim);
+        const shuffled = [...dimQuestions].sort(() => 0.5 - Math.random());
+        selected.push(...shuffled.slice(0, 4));
+      });
+      
+      // Final shuffle of the 20 questions
+      setSessionQuestions(selected.sort(() => 0.5 - Math.random()));
+    }
+  }, [step, sessionQuestions.length]);
 
-  const handleAnswer = (tendency: TendencyType) => {
-    const newAnswers = [...answers, tendency];
+  const handleStart = () => {
+    setSessionQuestions([]);
+    setAnswers([]);
+    setCurrentQuestionIndex(0);
+    setStep('questions');
+  };
+
+  const handleAnswer = (option: Option) => {
+    const newAnswers = [...answers, option.scores];
     setAnswers(newAnswers);
     
-    if (currentQuestionIndex < QUESTIONS.length - 1) {
+    if (currentQuestionIndex < sessionQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setStep('goals');
@@ -64,39 +92,59 @@ export default function App() {
   const result = useMemo(() => {
     if (answers.length === 0) return null;
     
-    // Count tendencies
-    const counts = answers.reduce((acc, curr) => {
-      acc[curr] = (acc[curr] || 0) + 1;
-      return acc;
-    }, {} as Record<TendencyType, number>);
+    // Calculate total scores for each dimension
+    const totalScores: Record<Dimension, number> = {
+      [Dimension.EXPLORATION]: 0,
+      [Dimension.ANALYSIS]: 0,
+      [Dimension.EXECUTION]: 0,
+      [Dimension.RESILIENCE]: 0,
+      [Dimension.COLLABORATION]: 0,
+    };
 
-    // Find the dominant tendency
-    let dominant = Tendency.EXECUTOR;
-    let maxCount = 0;
-    
-    (Object.entries(counts) as [TendencyType, number][]).forEach(([key, count]) => {
-      if (count > maxCount) {
-        maxCount = count;
-        dominant = key;
-      }
+    answers.forEach(answer => {
+      (Object.entries(answer) as [Dimension, number][]).forEach(([dim, score]) => {
+        totalScores[dim] += score;
+      });
     });
 
-    const analysis = ANALYSIS_DATA[dominant];
+    // Find the dominant dimension
+    const sortedDimensions = (Object.entries(totalScores) as [Dimension, number][])
+      .sort((a, b) => b[1] - a[1]);
+    
+    const dominantDim = sortedDimensions[0][0];
+    const secondaryDim = sortedDimensions[1][0];
+
+    const archetype = ARCHETYPE_MAP[dominantDim];
+    const secondaryArchetype = ARCHETYPE_MAP[secondaryDim];
+    
+    const analysis = ANALYSIS_DATA[archetype];
     const finalGoal = selectedGoal === 'Lainnya' ? customGoal : selectedGoal;
     const context = analysis.goalContexts[finalGoal] || analysis.defaultContext;
 
-    // Calculate scales (0-10)
-    const getScale = (t: TendencyType) => Math.min(10, Math.round(((counts[t] || 0) / answers.length) * 10 * 1.5));
+    // Normalize scales (0-10)
+    const getScale = (dim: Dimension) => {
+      // Assuming max possible score per dimension is ~12-16 based on 4 questions * 4 points
+      return Math.min(10, Math.round((totalScores[dim] / 12) * 10));
+    };
     
     const scales = {
-      analisis: getScale(Tendency.DEEP_THINKER),
-      eksplorasi: getScale(Tendency.EXPLORER),
-      eksekusi: getScale(Tendency.EXECUTOR),
-      kolaborasi: getScale(Tendency.CONNECTOR)
+      [Dimension.EXPLORATION]: getScale(Dimension.EXPLORATION),
+      [Dimension.ANALYSIS]: getScale(Dimension.ANALYSIS),
+      [Dimension.EXECUTION]: getScale(Dimension.EXECUTION),
+      [Dimension.RESILIENCE]: getScale(Dimension.RESILIENCE),
+      [Dimension.COLLABORATION]: getScale(Dimension.COLLABORATION),
     };
 
+    // Calculate confidence level (simple consistency check)
+    // Higher variance means lower confidence
+    const scores = Object.values(totalScores);
+    const mean = scores.reduce((a, b) => a + b) / scores.length;
+    const variance = scores.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / scores.length;
+    const confidence = Math.max(50, Math.min(95, Math.round(100 - (variance * 2))));
+
     return {
-      tendency: dominant,
+      archetype,
+      secondaryArchetype: archetype !== secondaryArchetype ? secondaryArchetype : null,
       description: analysis.description,
       strengths: analysis.strengths,
       friction: context.friction,
@@ -105,7 +153,8 @@ export default function App() {
       reflectionQuestions: context.reflectionQuestions,
       smallStep: context.smallStep,
       goal: finalGoal,
-      scales
+      scales,
+      confidence
     };
   }, [answers, selectedGoal, customGoal]);
 
@@ -115,6 +164,7 @@ export default function App() {
     setAnswers([]);
     setSelectedGoal('');
     setCustomGoal('');
+    setSessionQuestions([]);
   };
 
   const tryAnotherGoal = () => {
@@ -123,12 +173,13 @@ export default function App() {
     setCustomGoal('');
   };
 
-  const getIconForTendency = (tendency: TendencyType) => {
-    switch (tendency) {
-      case Tendency.EXPLORER: return <Lightbulb className="w-8 h-8 text-amber-500" />;
-      case Tendency.DEEP_THINKER: return <BookOpen className="w-8 h-8 text-blue-500" />;
-      case Tendency.EXECUTOR: return <Zap className="w-8 h-8 text-emerald-500" />;
-      case Tendency.CONNECTOR: return <Users className="w-8 h-8 text-purple-500" />;
+  const getIconForArchetype = (archetype: Archetype) => {
+    switch (archetype) {
+      case Archetype.EXPLORER: return <Lightbulb className="w-8 h-8 text-amber-500" />;
+      case Archetype.DEEP_THINKER: return <BookOpen className="w-8 h-8 text-blue-500" />;
+      case Archetype.EXECUTOR: return <Zap className="w-8 h-8 text-emerald-500" />;
+      case Archetype.CONNECTOR: return <Users className="w-8 h-8 text-purple-500" />;
+      case Archetype.STRATEGIST: return <Shield className="w-8 h-8 text-rose-500" />;
       default: return null;
     }
   };
@@ -163,7 +214,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {step === 'questions' && (
+          {step === 'questions' && sessionQuestions.length > 0 && (
             <motion.div
               key="questions"
               initial={{ opacity: 0, x: 20 }}
@@ -171,28 +222,38 @@ export default function App() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <div className="flex justify-between items-end">
-                  <span className="text-sm font-medium text-stone-400 uppercase tracking-wider">
-                    Pertanyaan {currentQuestionIndex + 1} dari {QUESTIONS.length}
-                  </span>
-                  <div className="h-1 w-32 bg-stone-200 rounded-full overflow-hidden">
+                  <div className="space-y-1">
+                    <span className="text-xs font-bold text-stone-400 uppercase tracking-widest block">
+                      Dimensi: {sessionQuestions[currentQuestionIndex].dimension}
+                    </span>
+                    <span className="text-sm font-medium text-stone-500">
+                      Pertanyaan {currentQuestionIndex + 1} dari {sessionQuestions.length}
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-32 bg-stone-200 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-stone-900 transition-all duration-300" 
-                      style={{ width: `${((currentQuestionIndex + 1) / QUESTIONS.length) * 100}%` }}
+                      style={{ width: `${((currentQuestionIndex + 1) / sessionQuestions.length) * 100}%` }}
                     />
                   </div>
                 </div>
-                <h2 className="text-2xl font-semibold text-stone-900">
-                  {QUESTIONS[currentQuestionIndex].text}
+                
+                <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl text-sm text-amber-800 italic">
+                  "Pilih jawaban yang paling mendekati kebiasaanmu, bukan yang paling ideal."
+                </div>
+
+                <h2 className="text-2xl font-bold text-stone-900 leading-tight">
+                  {sessionQuestions[currentQuestionIndex].text}
                 </h2>
               </div>
 
               <div className="grid gap-3">
-                {QUESTIONS[currentQuestionIndex].options.map((option, idx) => (
+                {sessionQuestions[currentQuestionIndex].options.map((option, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleAnswer(option.tendency)}
+                    onClick={() => handleAnswer(option)}
                     className="w-full text-left p-5 rounded-2xl border border-stone-200 bg-white hover:border-stone-400 hover:bg-stone-50 transition-all group flex items-center justify-between"
                   >
                     <span className="text-lg text-stone-700 group-hover:text-stone-900">
@@ -314,14 +375,24 @@ export default function App() {
             >
               <header className="text-center space-y-4">
                 <div className="inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-white shadow-xl shadow-stone-200 border border-stone-100 mb-6">
-                  {getIconForTendency(result.tendency)}
+                  {getIconForArchetype(result.archetype)}
                 </div>
-                <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400">
-                  Profil Utama Kamu
-                </h2>
-                <h1 className="text-5xl font-black text-stone-900">
-                  {result.tendency}
-                </h1>
+                <div className="space-y-1">
+                  <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400">
+                    Archetype Utama
+                  </h2>
+                  <h1 className="text-5xl font-black text-stone-900">
+                    {result.archetype}
+                  </h1>
+                  {result.secondaryArchetype && (
+                    <p className="text-lg text-stone-500 pt-2">
+                      Kecenderungan Kedua: <span className="font-bold text-stone-700">{result.secondaryArchetype}</span>
+                    </p>
+                  )}
+                  <p className="text-sm text-stone-400 pt-4">
+                    Tingkat Keyakinan Analisis: {result.confidence}%
+                  </p>
+                </div>
               </header>
 
               <div className="space-y-16">
@@ -343,25 +414,20 @@ export default function App() {
                     2. Profil Cara Kerja
                   </h3>
                   <div className="space-y-6 bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
-                    {[
-                      { label: 'Analisis mendalam', value: result.scales.analisis },
-                      { label: 'Eksplorasi ide', value: result.scales.eksplorasi },
-                      { label: 'Eksekusi cepat', value: result.scales.eksekusi },
-                      { label: 'Kolaborasi', value: result.scales.kolaborasi },
-                    ].map((item, idx) => (
+                    {(Object.entries(result.scales) as [string, number][]).map(([dim, value], idx) => (
                       <div key={idx} className="space-y-2">
                         <div className="flex justify-between text-sm font-bold text-stone-500 uppercase tracking-wider">
-                          <span>{item.label}</span>
-                          <span>{item.value * 10}%</span>
+                          <span>{dim}</span>
+                          <span>{value * 10}%</span>
                         </div>
                         <div className="h-3 bg-stone-100 rounded-full overflow-hidden flex">
                           {Array.from({ length: 10 }).map((_, i) => (
                             <div 
                               key={i}
-                              className={`flex-1 border-r border-white last:border-0 transition-all duration-1000 delay-${i * 100}`}
+                              className={`flex-1 border-r border-white last:border-0 transition-all duration-1000`}
                               style={{ 
-                                backgroundColor: i < item.value ? '#1c1917' : '#f5f5f4',
-                                opacity: i < item.value ? 1 : 0.3
+                                backgroundColor: i < value ? '#1c1917' : '#f5f5f4',
+                                opacity: i < value ? 1 : 0.3
                               }}
                             />
                           ))}
